@@ -1,0 +1,25 @@
+'use strict';
+const express = require('express');
+const bodyParser = require('body-parser');
+const multer = require('multer');
+const upload = multer({ dest: 'tmp/' });
+const app = express();
+const saveGamePro = require('./mongo-model');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(upload.single('file'));
+app.get('/' , function(req, res) {
+  res.end('Hello testing');
+})
+app.post('/savegamepro', function(req, res, next) {
+    return saveGamePro.save(function(data) {
+        res.end(data);
+    });
+});
+
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!');
+});
